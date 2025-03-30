@@ -25,6 +25,28 @@ Discord의 슬래시 명령어(`/랜덤디펜스`, `/help`)를 통해 봇 기능
 
 ## 실행 방법
 
+### Docker로 실행(Recommended)
+
+1. **Docker 이미지 빌드**
+
+   ```bash
+   docker build -t random-defense-bot .
+   ```
+
+2. **환경변수 파일 (.env) 준비**
+
+   프로젝트 루트에 `.env` 파일을 만들고 토큰을 설정합니다.
+
+
+3. **Docker 컨테이너 실행**
+
+   `.env` 파일을 컨테이너에 전달하면서 detached 모드로 실행합니다
+
+   ```bash
+   docker run -d --env-file=.env random-defense-bot
+   ```
+
+
 ### 로컬 실행
 
 1. **의존성 설치**
@@ -66,26 +88,6 @@ Discord의 슬래시 명령어(`/랜덤디펜스`, `/help`)를 통해 봇 기능
    poetry run python bot.py
    ```
 
-### Docker로 실행
-
-1. **Docker 이미지 빌드**
-
-   ```bash
-   docker build -t random-defense-bot .
-   ```
-
-2. **환경변수 파일 (.env) 준비**
-
-   프로젝트 루트에 `.env` 파일을 만들고 토큰을 설정합니다.
-
-
-3. **Docker 컨테이너 실행**
-
-   `.env` 파일을 컨테이너에 전달하면서 detached 모드로 실행합니다
-
-   ```bash
-   docker run -d --env-file=.env random-defense-bot
-   ```
 
 ## 사용 방법
 

@@ -33,14 +33,17 @@ async def random_problem(
     output_count: int,
     user_ids: str,
 ):
+    # 상호작용 응답을 지연(defer)하여 작업 시간을 확보합니다.
+    await interaction.response.defer(ephemeral=False)
+
     user_ids_list = user_ids.split()
 
     try:
         chosen_tier = utils.choose_random_tier(search_tier)
         random_problem_ids = utils.search_random_problems(chosen_tier, solved_threshold)
     except Exception as e:
-        await interaction.response.send_message(
-            f"랜덤 문제 검색 중 오류 발생: {e}", ephemeral=True
+        await interaction.followup.send(
+            f"랜덤 문제 검색 중 오류 발생: {e}", ephemeral=False
         )
         return
 
@@ -50,12 +53,12 @@ async def random_problem(
     )
 
     if not result_ids:
-        await interaction.response.send_message(
-            "사용자들이 풀지 않은 문제를 찾지 못했습니다.", ephemeral=True
+        await interaction.followup.send(
+            "사용자들이 풀지 않은 문제를 찾지 못했습니다.", ephemeral=False
         )
     else:
         result_message = "추천 문제 (문제 번호):\n" + "\n".join(map(str, result_ids))
-        await interaction.response.send_message(result_message)
+        await interaction.followup.send(result_message)
 
 
 @bot.tree.command(name="help", description="사용 가능한 명령어 목록을 확인합니다.")
@@ -71,7 +74,7 @@ async def help_command(interaction: discord.Interaction):
         "해당 코드는 오픈소스([Github](https://github.com/luckyvickyricky/BOJRandomDefense-Bot))로 개발되었습니다."
         "오류 발견시 수정하셔서 사용하시거나, issue 남겨주시면 감사하겠습니다."
     )
-    await interaction.response.send_message(help_message, ephemeral=True)
+    await interaction.response.send_message(help_message, ephemeral=False)
 
 
 if __name__ == "__main__":

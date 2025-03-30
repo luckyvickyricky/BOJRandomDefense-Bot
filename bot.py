@@ -1,10 +1,16 @@
 import os
+import logging
 
 import discord
 from discord import app_commands
 from discord.ext import commands
 
 import utils
+
+
+# 로깅 설정 (INFO 레벨 이상 출력)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class MyBot(commands.Bot):
@@ -37,6 +43,11 @@ async def random_problem(
     await interaction.response.defer(ephemeral=False)
 
     user_ids_list = user_ids.split()
+    logger.info(
+        f"/랜덤디펜스 호출됨: search_tier={search_tier}, "
+        f"solved_threshold={solved_threshold}, output_count={output_count}, "
+        f"user_ids={user_ids_list}"
+    )
 
     try:
         chosen_tier = utils.choose_random_tier(search_tier)
@@ -45,6 +56,7 @@ async def random_problem(
         await interaction.followup.send(
             f"랜덤 문제 검색 중 오류 발생: {e}", ephemeral=False
         )
+        logger.error(f"문제 검색 중 오류 발생: {e}")
         return
 
     solved_set = utils.get_solved_problem_ids(user_ids_list)
@@ -56,9 +68,11 @@ async def random_problem(
         await interaction.followup.send(
             "사용자들이 풀지 않은 문제를 찾지 못했습니다.", ephemeral=False
         )
+        logger.info("추천할 문제가 없습니다.")
     else:
         result_message = "추천 문제 (문제 번호):\n" + "\n".join(map(str, result_ids))
         await interaction.followup.send(result_message)
+        logger.info(f"추천 문제: {result_ids}")
 
 
 @bot.tree.command(name="help", description="사용 가능한 명령어 목록을 확인합니다.")

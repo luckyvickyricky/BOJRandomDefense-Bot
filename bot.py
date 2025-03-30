@@ -11,10 +11,8 @@ class MyBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
         super().__init__(command_prefix="!", intents=intents)
-        # self.tree = app_commands.CommandTree(self)  # 이 라인을 제거합니다.
 
     async def setup_hook(self):
-        # 슬래시 명령어 등록 (서버별 동기화 가능)
         await self.tree.sync()
 
 
@@ -24,8 +22,8 @@ bot = MyBot()
 @bot.tree.command(name="랜덤디펜스", description="랜덤 문제를 검색합니다.")
 @app_commands.describe(
     search_tier="검색 티어 (예: b3~b5 혹은 s2 혹은 g)",
-    solved_threshold="푼 사람수 기준 (예: 100 혹은 1000 혹은 10000)",
-    output_count="출력할 문제 개수",
+    solved_threshold="입력된 숫자 이상의 사람이 푼 문제를 검색합니다 (예: 100 혹은 1000 혹은 10000)",
+    output_count="출력할 문제 개수를 조정합니다",
     user_ids="유저 아이디:해당 유저가 푼 문제는 제외 후 검색합니다(여러 개 입력 가능, 띄어쓰기로 구분)",
 )
 async def random_problem(
@@ -66,7 +64,7 @@ async def help_command(interaction: discord.Interaction):
         "사용 가능한 슬래시 명령어 목록:\n\n"
         "/랜덤디펜스 - 랜덤 문제를 검색합니다.\n"
         "   • search_tier: 검색 티어 (예: b3~b5(브3~브5에서) 또는 s2(실2에서) 또는 g(골드에서))\n"
-        "   • solved_threshold: 푼 사람수 기준 (예: 100명이상 혹은 10000명이상)\n"
+        "   • solved_threshold: 입력된 숫자 이상의 사람이 푼 문제를 검색합니다.(예: 100명이상 혹은 10000명이상)\n"
         "   • output_count: 출력할 문제 개수\n"
         "   • user_ids: 유저 아이디:해당 유저가 푼 문제는 제외 후 검색합니다 (여러 개 입력 가능, 띄어쓰기로 구분)\n\n"
         "/help - 사용 가능한 명령어 목록을 확인합니다.\n\n"

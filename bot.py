@@ -62,7 +62,8 @@ async def random_problem(
                     fixed_users.append(user)
             query += " " + " ".join(fixed_users)
 
-        random_problem_ids = utils.search_random_problems(query)
+        # solved.ac API 호출, 문제 정보 리스트(각 항목이 dict)를 반환받음
+        random_problem_items = utils.search_random_problems(query)
     except Exception as e:
         await interaction.followup.send(
             f"랜덤 문제 검색 중 오류 발생: {e}", ephemeral=False
@@ -70,18 +71,31 @@ async def random_problem(
         logger.error(f"문제 검색 중 오류 발생: {e}")
         return
 
-    # 검색 결과에서 output_count만큼 문제 번호 추출
-    result_ids = random_problem_ids[:output_count]
+    # output_count만큼의 문제 정보를 선택 (API 검색 결과에서 앞 부분을 선택)
+    result_items = random_problem_items[:output_count]
 
-    if not result_ids:
+    if not result_items:
         await interaction.followup.send(
             "조건에 맞는 추천 문제를 찾지 못했습니다.", ephemeral=False
         )
         logger.info("추천할 문제가 없습니다.")
     else:
-        result_message = "추천 문제 (문제 번호):\n" + "\n".join(map(str, result_ids))
+        # 출력 양식에 맞춰 각 문제의 상세 정보를 문자열로 구성합니다.
+        lines = []
+        for item in result_items:
+            result_id = item.get("problemId", "N/A")
+            title = item.get("titleKo", "제목 없음")
+            user_cnt = item.get("acceptedUserCount", "N/A")
+            avg_tries = item.get("averageTries", "N/A")
+            line = (
+                f"문제번호 - {result_id}, 문제 제목 - {title}, 푼 사람 수 - {user_cnt}, "
+                f"평균 시도 - {avg_tries}회, [문제 링크](https://www.acmicpc.net/problem/{result_id})"
+            )
+            lines.append(line)
+
+        result_message = "추천 문제 :\n" + "\n".join(lines)
         await interaction.followup.send(result_message)
-        logger.info(f"추천 문제: {result_ids}")
+        logger.info(f"추천 문제: {result_message}")
 
 
 @bot.tree.command(name="help", description="사용 가능한 명령어 목록을 확인합니다.")

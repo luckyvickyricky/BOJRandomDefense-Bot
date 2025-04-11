@@ -27,7 +27,7 @@ def search_random_problems(query: str) -> list:
     solved.ac API를 사용하여 랜덤 문제를 검색합니다.
 
     쿼리 예시: "*b2 s#10000.. !@user1 !@user2"
-    반환값: 문제 번호(int) 리스트
+    반환값: 문제 정보(dict) 리스트
     """
     api_url = "https://solved.ac/api/v3/search/problem"
     params = {"query": query, "direction": "asc", "page": 1, "sort": "random"}
@@ -37,5 +37,4 @@ def search_random_problems(query: str) -> list:
 
     data = response.json()
     items = data.get("items", [])
-    problem_ids = [item["problemId"] for item in items]
-    return problem_ids
+    return items

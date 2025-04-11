@@ -32,4 +32,4 @@ CMD ["poetry", "run", "python", "bot.py"]
 
 
 # docker build -t random-defense-bot .
-# docker run -d --env-file=.env random-defense-bot
+# docker run -d --env-file=.env random-defense-bot --name BOJ_rd_bot_prod

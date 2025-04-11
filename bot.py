@@ -87,7 +87,7 @@ async def random_problem(
             avg_tries = item.get("averageTries", "N/A")
             line = (
                 f"문제번호 - {result_id}, 문제 제목 - {title}, 푼 사람 수 - {user_cnt}, "
-                f"평균 시도 - {avg_tries}, [문제 링크](https://www.acmicpc.net/problem/{result_id})"
+                f"평균 시도 - {avg_tries}회, [문제 링크](https://www.acmicpc.net/problem/{result_id})"
             )
             lines.append(line)
 

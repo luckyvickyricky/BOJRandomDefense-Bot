@@ -43,7 +43,7 @@ Discord의 슬래시 명령어(`/랜덤디펜스`, `/help`)를 통해 봇 기능
    `.env` 파일을 컨테이너에 전달하면서 detached 모드로 실행합니다
 
    ```bash
-   docker run -d --env-file=.env random-defense-bot
+   docker run -d --env-file=.env --name BOJ_rd_bot_prod random-defense-bot
    ```
 
 
